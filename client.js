@@ -1,5 +1,19 @@
 var fqdn = `http://${window.location.hostname}:8000`;
 
+//--------- HTML lifecycle methods -----------------------
+
+function onload() {
+
+    var emailInput = document.getElementById("emailInput");
+    var emailLabel = document.getElementById("emailLabel");
+    emailLabel.innerText = emailInput.value;
+    emailInput.addEventListener("input", function () {
+        emailLabel.innerText = this.value;
+    });
+}
+
+//--------- HTTP request methods -----------------------
+
 function createTables() {
     fetch(`${fqdn}/createTables`).then(function (response) {
         // The API call was successful!
@@ -9,7 +23,9 @@ function createTables() {
             return Promise.reject(response);
         }
     }).then(function (data) {
-        console.log(data);
+        if (data && data.status) {
+            alert(data.status);
+        }
     }).catch(function (err) {
         // There was an error
         console.warn('Something went wrong.', err);
@@ -17,7 +33,6 @@ function createTables() {
 }
 
 function getAPIKeyBtnPressed() {
-    //alert("Get API key!");
     var email = document.getElementById("emailInput").value;
     if (email) {
         fetch(`${fqdn}/getApiKey`, {
@@ -37,8 +52,7 @@ function getAPIKeyBtnPressed() {
             }
         }).then(function (data) {
             document.getElementById("apiKeyLabel").innerText = data.apiKey;
-            // This is the JSON from our response
-            console.log(data);
+            //console.log(data);
         }).catch(function (err) {
             // There was an error
             console.warn('Something went wrong.', err);
@@ -57,13 +71,10 @@ function getAllAssignedKeysBtnPressed() {
             return Promise.reject(response);
         }
     }).then(function (data) {
-        var values = data.keys.map((row) => row.email + " " + row.key);
+        var values = data.keys.map((row) => row.email + " ".repeat(32 - row.email.length) + " | \t" + row.key);
         document.getElementById("allKeysTextArea").value = values.join("\n");
-
-        // });
-        // document.getElementById("allKeysTextArea").value = data.keys;
-        // This is the JSON from our response
-        console.log(data);
+        document.getElementById("allKeysTextArea").style.height = (18 * data.keys.length) + "px";
+        //console.log(data);
     }).catch(function (err) {
         // There was an error
         console.warn('Something went wrong.', err);
@@ -91,7 +102,7 @@ function getMyUsageBtnPressed() {
         }).then(function (data) {
             var table = document.getElementById("myUsageTable");
 
-            while( table.rows.length > 1) table.rows[1].remove();
+            while (table.rows.length > 1) table.rows[1].remove();
             data.usage.forEach((row) => {
                 var tbdy = document.createElement('tbody');
                 const tr = table.insertRow();
@@ -101,13 +112,7 @@ function getMyUsageBtnPressed() {
                 td2.appendChild(document.createTextNode(row.endpoint));
                 table.appendChild(tbdy);
             });
-            // var values = data.usage.map((row) => row.key + " " + row.endpoint);
-            // document.getElementById("myUsageTextArea").value = values.join("\n");
-
-            // });
-            // document.getElementById("allKeysTextArea").value = data.keys;
-            // This is the JSON from our response
-            console.log(data);
+            //console.log(data);
         }).catch(function (err) {
             // There was an error
             console.warn('Something went wrong.', err);

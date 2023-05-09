@@ -2,12 +2,13 @@ const express = require('express')
 const app = express()
 app.use(express.json()) // <==== parse request body as JSON
 const port = 8000;
-
+const http  = require('http');
 const sqlite3 = require('sqlite3');
 const path = require('path');
-const { uuid } = require("uuidv4");
+const { v4 : uuidv4 } = require("uuid");
 
-//---------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------
+//---------- Serve Files for the website -------------------
 ["/", "/index.html"].forEach(function (entryPoint) {
     app.get(entryPoint, (req, res) => {
         res.sendFile(path.join(__dirname + '/index.html'));
@@ -18,11 +19,11 @@ app.get('^/:js(*.js)', (req, res) => {
     res.sendFile(path.join(__dirname + '/' + req.params.js));
 });
 
-app.post('/getApiKey', (req, res) => {
-    getApiKey(req.body.email, function (keyDetails) {
-        res.json({ "apiKey": keyDetails });
-    });
+app.get('^/:css(*.css)', (req, res) => {
+    res.sendFile(path.join(__dirname + '/' + req.params.css));
 });
+
+//---------- API GET / POST requests -----------------------
 
 app.get('/createTables', (req, res) => {
     createDbTable((message) => {
@@ -33,8 +34,19 @@ app.get('/createTables', (req, res) => {
 app.get('/date', (req, res) => {
     isKeyValid(req.query.key, (result) => {
         if (result) {
-            res.json({ "date": Date.now() });
+            res.json({ "date": new Date().toLocaleDateString("de-de") });
             addToUsageTable("date", req.query.key);
+        } else {
+            res.status(401).send({ error: 'Invalid API Key' });
+        }
+    });
+});
+
+app.get('/time', (req, res) => {
+    isKeyValid(req.query.key, (result) => {
+        if (result) {
+            res.json({ "time": new Date().toLocaleTimeString("de-de") });
+            addToUsageTable("time", req.query.key);
         } else {
             res.status(401).send({ error: 'Invalid API Key' });
         }
@@ -47,16 +59,24 @@ app.get('/getAllKeys', (req, res) => {
     });
 });
 
+app.post('/getApiKey', (req, res) => {
+    getApiKey(req.body.email, function (keyDetails) {
+        res.json({ "apiKey": keyDetails });
+    });
+});
+
 app.post('/getMyUsage', (req, res) => {
     readUsageFromDb(req.body.email, function (usage) {
         res.json({ "usage": usage });
     });
 });
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-})
-//------------------------------------------------------------------------------
+const server = http.createServer(app);
+server.listen(port, () => {
+    console.log(`WebAPI server listening at port ${port}`);
+});
+
+//----------------------------------------------------------
 
 function getApiKey(email, callback) {
     email = decodeURI(email);
@@ -64,7 +84,7 @@ function getApiKey(email, callback) {
         if (status) {
             callback("Email already exists! Please provide another email address.");
         } else {
-            var apiKey = uuid();
+            var apiKey = uuidv4();
             addToApiKeyTable(email, apiKey);
             callback(apiKey);
         }

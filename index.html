@@ -1,73 +1,46 @@
+<!DOCTYPE html>
 <html>
 
 <head>
     <title>My REST API homepage</title>
+    <script src="client.js"></script>
+    <link rel="stylesheet" href="style.css" />
 </head>
-<script src="client.js"></script>
-<style>
-    table,
-    th,
-    td {
-        padding: 5px;
-        border: 1px solid black;
-        border-collapse: collapse;
-        text-align: center;
-    }
 
-    th {
-        width: 300px;
-    }
-
-    .admin {
-        background-color: aquamarine;
-        padding: 10px;
-
-    }
-
-    textarea {
-        width: 100%;
-    }
-</style>
-
-<body>
+<body onload="onload()">
     <h1>Welcome to my REST API homepage</h1>
-    <p>To consume an API, get a key</p>  
 
-    <div>
-        <label for="emailInput">User email : </label>
-        <input type="email" id="emailInput"></input>
-        <button onclick="getAPIKeyBtnPressed()">Get API Key</button>        
-        <label id="apiKeyLabel"></label><br>
+    <div class="container">
+        <div class="sameLine">
+            <label for="emailInput">User email : </label>
+            <input type="email" id="emailInput"></input>
+            <button onclick="getAPIKeyBtnPressed()">Get API Key</button>
+            <label id="apiKeyLabel"></label>
+        </div>
+
+        <div id="usageDataDiv">
+            <div class="sameLine">
+                <button onclick="getMyUsageBtnPressed()">Get usage data for </button>
+                <label id="emailLabel"></label>
+            </div>
+            <div id="tableDiv">
+                <table id="myUsageTable">
+                    <tr>
+                        <th>API Key</th>
+                        <th>Endpoint</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="admin">
+            <button onclick="getAllAssignedKeysBtnPressed()">Get all API Keys</button>
+            <textarea id="allKeysTextArea"></textarea>
+            <button onclick="createTables()">Reset DB</button><br>
+        </div>
     </div>
 
-    <br>
-    <br>
-
-    <div>
-        <table id="myUsageTable">
-            <tr>
-                <th>API Key</th>
-                <th>Endpoint</th>
-                <th>Timestamp</th>
-            </tr>
-        </table>
-        <br>
-        <button onclick="getMyUsageBtnPressed()">Get my usage data</button>
-    </div>
-
-    <br>
-    <br>
 </body>
-<footer>
-    <div class="admin">
-        <button onclick="getAllAssignedKeysBtnPressed()">Get all API Keys</button><br>
-        <textarea id="allKeysTextArea"></textarea>
 
-        <br>
-        <br>
-        <button onclick="createTables()">Initialize DB</button><br> 
-    </div>
-
-    
-</footer>
 </html>
