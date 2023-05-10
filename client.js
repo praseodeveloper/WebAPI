@@ -73,7 +73,7 @@ function getAllAssignedKeysBtnPressed() {
     }).then(function (data) {
         var values = data.keys.map((row) => row.email + " ".repeat(32 - row.email.length) + " | \t" + row.key);
         document.getElementById("allKeysTextArea").value = values.join("\n");
-        document.getElementById("allKeysTextArea").style.height = (18 * data.keys.length) + "px";
+        //document.getElementById("allKeysTextArea").style.height = (18 * data.keys.length) + "px";
         //console.log(data);
     }).catch(function (err) {
         // There was an error

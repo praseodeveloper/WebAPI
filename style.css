@@ -1,6 +1,6 @@
 * {
     background-color: rgba(234, 243, 243, 0.986);
-    font-size: 14px;
+    font-size: 13px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
@@ -16,6 +16,8 @@ h1 {
 }
 
 .container {
+    height: calc(100% - 150px);
+    overflow: auto;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -41,7 +43,7 @@ h1 {
 }
 
 table {
-    width: 100%;
+    width: calc(100% - 20px);
 }
 
 table,
@@ -54,16 +56,29 @@ td {
 }
 
 .admin {
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    height: 150px;
     position: absolute;
-    bottom: 5px;
+    bottom: 10px;
     width: calc(100% - 35px);
     background-color: dimgrey;
-    align-items: center;
+    align-items:flex-start;
     padding: 10px;
 }
 
+button {
+    background-color: white;
+    border-radius : 5px;
+}
+
 textarea {
+    border-radius: 5px;
+    resize: none;
     padding: 10px;
-    width: calc(100% - 20px);
+    width: calc(100% - 25px);
+    height: 80px;
     font-family: 'Courier New', Courier, monospace;
 }
