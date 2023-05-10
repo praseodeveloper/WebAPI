@@ -11,16 +11,16 @@ const { v4 : uuidv4 } = require("uuid");
 //---------- Serve Files for the website -------------------
 ["/", "/index.html"].forEach(function (entryPoint) {
     app.get(entryPoint, (req, res) => {
-        res.sendFile(path.join(__dirname + '/index.html'));
+        res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
     });
 });
 
 app.get('^/:js(*.js)', (req, res) => {
-    res.sendFile(path.join(__dirname + '/' + req.params.js));
+    res.sendFile(path.join(__dirname,  'frontend' , req.params.js));
 });
 
 app.get('^/:css(*.css)', (req, res) => {
-    res.sendFile(path.join(__dirname + '/' + req.params.css));
+    res.sendFile(path.join(__dirname , 'frontend' , req.params.css));
 });
 
 //---------- API GET / POST requests -----------------------
