@@ -1,4 +1,4 @@
-var fqdn = `http://${window.location.hostname}:8000`;
+var fqdn = `${window.location.protocol}//${window.location.host}`;
 
 //--------- HTML lifecycle methods -----------------------
 
